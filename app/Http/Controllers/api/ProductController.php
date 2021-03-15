@@ -1,8 +1,5 @@
 <?php
-
-
 namespace App\Http\Controllers\api;
-
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -27,7 +24,7 @@ class ProductController extends Controller
 
     public function delete(Request $request, $id, $pass = null)
     {
-        if($pass == "ADMPASS666"){
+        if($pass == env("ADMPASS")){
             // DELETAR TODOS OS REGISTROS
             return;
         }
