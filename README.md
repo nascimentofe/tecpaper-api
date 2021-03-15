@@ -1,4 +1,4 @@
-<p style="text-align: center">
+<p align="center">
     <a href="https://laravel.com" target="_blank">
         <img src="http://chadamanu.tk/tecpaper/img/logo_api.png" width="150" alt="">
     </a>
