@@ -34,7 +34,8 @@ pass | Administrator password to delete all database records.
     "id" : "7891040091027",
     "name" : "Mini post-it",
     "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-    "price" : 4.25
+    "price" : 4.25,
+    "image": "/img/7891040091027/image.jpg"
 }
 ```
 ###
@@ -49,7 +50,8 @@ pass | Administrator password to delete all database records.
         "id" : "7891040091027",
         "name" : "Mini post-it",
         "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-        "price" : 4.25
+        "price" : 4.25,
+        "image": "/img/7891040091027/image.jpg"
     },
     {
         "id" : "1189888888027",
@@ -61,7 +63,8 @@ pass | Administrator password to delete all database records.
         "id" : "00111019289121027",
         "name" : "Corretivo Líquido",
         "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-        "price" : 13.90
+        "price" : 13.90,
+        "image": "/img/00111019289121027/image.jpg"
     }
 ] 
 ```
