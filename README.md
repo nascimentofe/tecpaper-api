@@ -21,7 +21,7 @@ pass | Administrator password to delete all database records.
 
 ###
 
-##1. Get Product (GET)
+## 1. Get Product (GET)
 
 ###
 - #### Specific product
