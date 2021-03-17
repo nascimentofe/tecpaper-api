@@ -19,11 +19,11 @@ price | The price of product.
 image | Product display image.
 pass | Administrator password to delete all database records.
 
-###
+
 
 ## 1. Get Product (GET)
 
-###
+
 - #### Specific product
 ```url
     https://linkdaapi.com/products/get/{id}
@@ -38,7 +38,7 @@ pass | Administrator password to delete all database records.
     "image": "/img/7891040091027/image.jpg"
 }
 ```
-###
+
 - #### All products
 ```URL
     https://linkdaapi.com/products/get/
@@ -68,9 +68,9 @@ pass | Administrator password to delete all database records.
     }
 ] 
 ```
-##
+
  ## 2. New Product (POST)
-###
+
 
 ```URL
 https://linkdaapi.com/products/post/
@@ -88,12 +88,14 @@ https://linkdaapi.com/products/post/
 ```JSON
 { // SUCCESS
     "result": "OK",
+    "details" : "",
     "code": 200
 }
 ```
 ```JSON
 { // ERROR
     "result": "ERROR",
+    "details" : "",
     "code": 404
 }
 ```
@@ -114,12 +116,14 @@ https://linkdaapi.com/products/post/
 ```JSON
 { // SUCCESS
     "result": "OK",
+    "details" : "",
     "code": 200
 }
 ```
 ```JSON
 { // ERROR
     "result": "ERROR",
+    "details" : "",
     "code": 404
 }
 ```
@@ -131,3 +135,31 @@ https://linkdaapi.com/products/put/
 **The API is able to check the data provided and update the database, only what is necessary.**
 <br>
 **You must pass a JSON to update a record. The process is similar to when you are going to insert a new product.**
+
+## 4. Delete Product
+
+- #### Especific Product
+
+```url
+https://linkdaapi.com/products/delete/{pass}/{id?}
+```
+
+- #### All Products
+
+```url
+https://linkdaapi.com/products/delete/{pass}/
+```
+```JSON
+{ // SUCCESS
+    "result" : "OK",
+    "details" : "",
+    "code" : 200
+}
+```
+```JSON
+{ // ERROR
+    "result" : "ERROR",
+    "details" : "",
+    "code": 404
+}
+```
