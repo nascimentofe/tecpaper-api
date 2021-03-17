@@ -163,3 +163,7 @@ https://linkdaapi.com/products/delete/{pass}/
     "code": 404
 }
 ```
+
+## 5. Support
+
+Any questions or suggestions, send an email to: ***fenascimentodev@gmail.com***
