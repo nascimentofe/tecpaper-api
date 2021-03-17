@@ -12,5 +12,5 @@ Route::post('/products/post',
 Route::put('/products/put',
     [ProductController::class, 'put'])->name('products.put');
 
-Route::delete('/products/delete/{id}/{pass?}',
+Route::delete('/products/delete/{pass}/{id?}',
     [ProductController::class, 'delete'])->name('products.delete');
