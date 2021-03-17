@@ -141,7 +141,7 @@ https://linkdaapi.com/products/put/
 - #### Especific Product
 
 ```url
-https://linkdaapi.com/products/delete/{pass}/{id?}
+https://linkdaapi.com/products/delete/{pass}/{id}
 ```
 
 - #### All Products
