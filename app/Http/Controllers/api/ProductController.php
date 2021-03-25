@@ -17,7 +17,10 @@ class ProductController extends Controller
     // GET PRODUCTS WITH ID
     public function show($id)
     {
-        return Product::findOrFail($id);
+        return (Product::find($id) != null) ? Product::find($id) : json_encode([
+            "result" => "PRODUTO NAO ENCONTRADO",
+            "code" => 404
+        ]);
     }
 
     // POST PRODUCTS
@@ -71,7 +74,14 @@ class ProductController extends Controller
                 "code" => 400
             ]);
 
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if($product == null){
+            return json_encode([
+                "result" => "PRODUTO NAO ENCONTRADO",
+                "code" => 404
+            ]);
+        }
+
         $product->id = $request->id;
         $product->name = $request->name;
         $product->description = $request->description;
@@ -98,7 +108,7 @@ class ProductController extends Controller
 
                 $product->delete();
 
-                $json['result'] = ["status" => "REGISTRO DELETADO", "product" => $product];
+                $json['result'] = "REGISTRO DELETADO";
                 $json['code'] = 200;
             }else{
                 // DELETE ALL PRODUCTS
