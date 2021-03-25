@@ -29,42 +29,43 @@ class ProductController extends Controller
         // RECEBENDO E REQUISIÇÃO 'PUT' VIA 'POST' E TRANSFERINDO PARA A FUNÇÃO ESPECÍFICA
         if($request->update == "true"){
             return $this->update($request, $request->id);
-        }
-
-        if ($request->id == null ||
-            $request->name == null ||
-            $request->description == null ||
-            $request->price == null )
+        }else{
+            if ($request->id == null ||
+                $request->name == null ||
+                $request->description == null ||
+                $request->price == null )
                 return json_encode([
                     "result" => "PARAMETROS INVALIDOS",
                     "code" => 400
                 ]);
 
-        if (Product::find($request->id) != null)
+            if (Product::find($request->id) != null)
+                return json_encode([
+                    "result" => "REGISTRO JA EXISTENTE",
+                    "code" => 400
+                ]);
+
+            $product = new Product();
+            $product->id = $request->id;
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->image = $this->uploadImage($request);
+            $product->created_at = date("Y-m-d H:i:s", time());
+            $product->updated_at = date("Y-m-d H:i:s", time());
+            $product->save();
+
             return json_encode([
-                "result" => "REGISTRO JA EXISTENTE",
-                "code" => 400
+                "result" => "REGISTRO INSERIDO",
+                "code" => 200
             ]);
-
-        $product = new Product();
-        $product->id = $request->id;
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
-        $product->image = $this->uploadImage($request);
-        $product->created_at = date("Y-m-d H:i:s", time());
-        $product->updated_at = date("Y-m-d H:i:s", time());
-        $product->save();
-
-        return json_encode([
-           "result" => "REGISTRO INSERIDO",
-           "code" => 200
-        ]);
+        }
     }
 
     // PUT PRODUCTS
     public function update(Request $request, $id)
     {
+
         if ($request->id == null ||
             $request->name == null ||
             $request->description == null ||
@@ -86,7 +87,8 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
-        $product->image = ($this->uploadImage($request) != "") ? $this->uploadImage($request) : $product->image;
+        $imagePath = $this->uploadImage($request);
+        $product->image = ($imagePath != "") ? $imagePath : $product->image;
         $product->updated_at = date("Y-m-d H:i:s", time());
         $product->update();
 
@@ -130,13 +132,20 @@ class ProductController extends Controller
         $fullPath = "";
         if ($request->allFiles() > 0){
             if ($request->file('image') != null){
+                $ext = $request->file('image')->extension();
+
+                if ($ext != "jpg" && $ext != "jpeg" && $ext != "png"){
+                    die(json_encode([
+                        "result" => "FORMATO DE IMAGEM INVALIDO",
+                        "code" => 400
+                    ]));
+                }
 
                 $path = public_path() . "/img/upload/" . $request->id . "/";
-                $fullPath = $path . "image.jpg";
 
-                if(!file_exists($fullPath)){
-                    $request->file('image')->move($path, "image.jpg");
-                }
+                $request->file('image')->move($path, "image.jpg");
+
+                $fullPath = "/tecpaper/public/img/upload/{$request->id}/image.jpg";
             }
         }
         return $fullPath;

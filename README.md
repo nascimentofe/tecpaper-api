@@ -26,22 +26,24 @@ pass | Administrator password to delete all database records.
 
 - #### Specific product
 ```url
-    https://linkdaapi.com/products/get/{id}
+    http://tecpaper.tk/tecpaper/public/api/products/{id}
 ```
 
 ```JSON
 {
-    "id" : "7891040091027",
-    "name" : "Mini post-it",
-    "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-    "price" : 4.25,
-    "image": "/img/7891040091027/image.jpg"
+    "id": 1122,
+    "name": "Sapato social",
+    "description": "Utilizado para trabalho e festas reservadas.",
+    "price": 39.9,
+    "image": "/tecpaper/public/img/upload/1122/image.jpg",
+    "created_at": "2021-03-25T15:13:05.000000Z",
+    "updated_at": "2021-03-25T18:09:41.000000Z"
 }
 ```
 
 - #### All products
-```URL
-    https://linkdaapi.com/products/get/
+```url
+    http://tecpaper.tk/tecpaper/public/api/products/
 ```
 
 ```JSON
@@ -51,20 +53,27 @@ pass | Administrator password to delete all database records.
         "name" : "Mini post-it",
         "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
         "price" : 4.25,
-        "image": "/img/7891040091027/image.jpg"
+        "image": "/img/7891040091027/image.jpg",
+        "created_at": "2021-03-25T15:13:05.000000Z",
+        "updated_at": "2021-03-25T18:09:41.000000Z"
     },
     {
         "id" : "1189888888027",
         "name" : "Cola em bastão",
         "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-        "price" : 7.60
+        "price" : 7.60,
+        "image" : "",
+        "created_at": "2021-03-25T15:13:05.000000Z",
+        "updated_at": "2021-03-25T18:09:41.000000Z"
     },
     {
         "id" : "00111019289121027",
         "name" : "Corretivo Líquido",
         "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
         "price" : 13.90,
-        "image": "/img/00111019289121027/image.jpg"
+        "image": "/img/00111019289121027/image.jpg",
+        "created_at": "2021-03-25T15:13:05.000000Z",
+        "updated_at": "2021-03-25T18:09:41.000000Z"
     }
 ] 
 ```
@@ -73,94 +82,81 @@ pass | Administrator password to delete all database records.
 
 
 ```URL
-https://linkdaapi.com/products/post/
+http://tecpaper.tk/tecpaper/public/api/products/
 ```
 
-- #### With Json (But no image)
-```JSON
-{
-    "id" : "7891040091027",
-    "name" : "Mini post-it",
-    "description" : "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.",
-    "price" : 4.25
-}
-```
-```JSON
-{ // SUCCESS
-    "result": "OK",
-    "details" : "",
-    "code": 200
-}
-```
-```JSON
-{ // ERROR
-    "result": "ERROR",
-    "details" : "",
-    "code": 404
-}
-```
 **To include an image in the product and send it to the database, it is necessary to send it as Post multipart / form-data.**
 
 - #### Example with [Ion](https://github.com/koush/ion) (Android)
 ```JAVA
     Ion.with(getContext())
-        .load("https://linkdaapi.com/products/post/")
+        .load("http://tecpaper.tk/tecpaper/public/api/products/")
         .setMultipartParameter("id", "7891040091027")
         .setMultipartParameter("name", "Mini post-it")
         .setMultipartParameter("description", "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.")
         .setMultipartParameter("price", 4.25)
-        .setMultipartFile("archive", "application/zip", new File("/sdcard/filename.zip"))
+        .setMultipartFile("image", "image/jpeg", new File("/sdcard/filename.jpeg"))
         .asJsonObject()
         .setCallback(...)
 ```
 ```JSON
 { // SUCCESS
-    "result": "OK",
-    "details" : "",
-    "code": 200
+    "result" : "REGISTRO INSERIDO",
+    "code" : 200
 }
 ```
-```JSON
-{ // ERROR
-    "result": "ERROR",
-    "details" : "",
-    "code": 404
-}
-```
-## 3. Update Product
+
+## 3. Update Product (POST)
 
 ```URL
-https://linkdaapi.com/products/put/
+http://tecpaper.tk/tecpaper/public/api/products/
 ```
 **The API is able to check the data provided and update the database, only what is necessary.**
 <br>
-**You must pass a JSON to update a record. The process is similar to when you are going to insert a new product.**
 
-## 4. Delete Product
+- #### Example with [Ion](https://github.com/koush/ion) (Android)
+```JAVA
+    Ion.with(getContext())
+        .load("http://tecpaper.tk/tecpaper/public/api/products/")
+        .setMultipartParameter("id", "7891040091027")
+        .setMultipartParameter("name", "Mini post-it")
+        .setMultipartParameter("description", "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.")
+        .setMultipartParameter("price", 4.25)
+        .setMultipartParameter("update", "true")
+        .setMultipartFile("image", "image/jpeg", new File("/sdcard/filename.jpeg"))
+        .asJsonObject()
+        .setCallback(...)
+```
+```JSON
+{ // SUCCESS
+    "result" : "REGISTRO ATUALIZADO",
+    "code" : 200
+}
+```
+
+## 4. Delete Product (DELETE)
 
 - #### Especific Product
 
 ```url
-https://linkdaapi.com/products/delete/{pass}/{id}
+http://tecpaper.tk/tecpaper/public/api/products/{id}?pass={pass}
 ```
 
 - #### All Products
 
 ```url
-https://linkdaapi.com/products/delete/{pass}/
+http://tecpaper.tk/tecpaper/public/api/products/0?pass={pass}
 ```
 ```JSON
 { // SUCCESS
-    "result" : "OK",
-    "details" : "",
+    "result" : "REGISTRO DELETADO",
     "code" : 200
 }
 ```
 ```JSON
 { // ERROR
-    "result" : "ERROR",
-    "details" : "",
-    "code": 404
+    "result" : "ACESSO NAO PERMITIDO",
+    "code": 400
 }
 ```
 
