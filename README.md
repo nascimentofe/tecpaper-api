@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://laravel.com" target="_blank">
-        <img src="http://chadamanu.tk/tecpaper/img/logo_api.png" width="150" alt="">
+        <img src="http://tecpaper.tk/tecpaper/public/img/ic_launcher.png" width="150" alt="">
     </a>
 </p>
 
