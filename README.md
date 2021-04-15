@@ -26,11 +26,12 @@ pass | Administrator password to delete all database records.
 
 - #### Specific product
 ```url
-    http://tecpaper.tk/tecpaper/public/api/products/{id}
+    http://tecpaper.tk/tecpaper/public/api/products?id={id}
 ```
 
 ```JSON
-{
+// http://tecpaper.tk/tecpaper/public/api/products?id=1122
+{ 
     "id": 1122,
     "name": "Sapato social",
     "description": "Utilizado para trabalho e festas reservadas.",
@@ -88,7 +89,7 @@ http://tecpaper.tk/tecpaper/public/api/products/
 **To include an image in the product and send it to the database, it is necessary to send it as Post multipart / form-data.**
 
 - #### Example with [Ion](https://github.com/koush/ion) (Android)
-```JAVA
+```JAVASCRIPT
     Ion.with(getContext())
         .load("http://tecpaper.tk/tecpaper/public/api/products/")
         .setMultipartParameter("id", "7891040091027")
@@ -99,6 +100,31 @@ http://tecpaper.tk/tecpaper/public/api/products/
         .asJsonObject()
         .setCallback(...)
 ```
+
+- #### Example with [AsyncHttpClient](https://loopj.com/android-async-http/) (Android)
+
+```JAVASCRIPT
+RequestParams params = new RequestParams();
+        params.put("id", id);
+        params.put("name", name);
+        params.put("description", desc);
+        params.put("price", Double.valueOf(price));
+        params.put("image", new FileInputStream(fileImage), fileImage.getName());
+        
+        new AsyncHttpClient()
+                .post("", params, new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        try {
+                            Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+```
+
+
 ```JSON
 { // SUCCESS
     "result" : "REGISTRO INSERIDO",
@@ -115,7 +141,7 @@ http://tecpaper.tk/tecpaper/public/api/products/
 <br>
 
 - #### Example with [Ion](https://github.com/koush/ion) (Android)
-```JAVA
+```JAVASCRIPT
     Ion.with(getContext())
         .load("http://tecpaper.tk/tecpaper/public/api/products/")
         .setMultipartParameter("id", "7891040091027")
@@ -127,6 +153,31 @@ http://tecpaper.tk/tecpaper/public/api/products/
         .asJsonObject()
         .setCallback(...)
 ```
+
+- #### Example with [AsyncHttpClient](https://loopj.com/android-async-http/) (Android)
+
+```PHP
+    RequestParams params = new RequestParams();
+        params.put("id", "7891040091027");
+        params.put("name", "Mini post-it");
+        params.put("description", "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.");
+        params.put("price", 4.25);
+        params.put("update", "true");
+        params.put("image", new FileInputStream(new File("/sdcard/filename.jpeg")), "filename.jpg");
+        
+        new AsyncHttpClient()
+                .post("http://tecpaper.tk/tecpaper/public/api/products", 
+                    params, new JsonHttpResponseHandler(){
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            try {
+                                Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                });
+```
 ```JSON
 { // SUCCESS
     "result" : "REGISTRO ATUALIZADO",
@@ -134,27 +185,24 @@ http://tecpaper.tk/tecpaper/public/api/products/
 }
 ```
 
-## 4. Delete Product (DELETE)
+## 4. Delete Product (GET)
 
 - #### Especific Product
 
 ```url
-http://tecpaper.tk/tecpaper/public/api/products/{id}?pass={pass}
+http://tecpaper.tk/tecpaper/public/api/products?id={id}&pass={pass}
 ```
 
-- #### All Products
-
-```url
-http://tecpaper.tk/tecpaper/public/api/products/0?pass={pass}
-```
 ```JSON
-{ // SUCCESS
+// http://tecpaper.tk/tecpaper/public/api/products?id=123&pass=#####
+{ 
     "result" : "REGISTRO DELETADO",
     "code" : 200
 }
 ```
 ```JSON
-{ // ERROR
+// http://tecpaper.tk/tecpaper/public/api/products?id=123&pass=123
+{ 
     "result" : "ACESSO NAO PERMITIDO",
     "code": 400
 }

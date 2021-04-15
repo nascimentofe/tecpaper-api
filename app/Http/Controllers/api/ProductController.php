@@ -4,67 +4,69 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\File;
+use function PHPUnit\Framework\directoryExists;
 
 class ProductController extends Controller
 {
-
-    // GET PRODUCTS
-    public function index()
+    public function get(Request $request)
     {
-        return Product::all();
-    }
+        if ($request->pass != null){
+            return $this->delete($request);
+        }
 
-    // GET PRODUCTS WITH ID
-    public function show($id)
-    {
-        return (Product::find($id) != null) ? Product::find($id) : json_encode([
-            "result" => "PRODUTO NAO ENCONTRADO",
-            "code" => 404
-        ]);
-    }
+        $id = $request->id;
 
-    // POST PRODUCTS
-    public function store(Request $request)
-    {
-        // RECEBENDO E REQUISIÇÃO 'PUT' VIA 'POST' E TRANSFERINDO PARA A FUNÇÃO ESPECÍFICA
-        if($request->update == "true"){
-            return $this->update($request, $request->id);
-        }else{
-            if ($request->id == null ||
-                $request->name == null ||
-                $request->description == null ||
-                $request->price == null )
-                return json_encode([
-                    "result" => "PARAMETROS INVALIDOS",
-                    "code" => 400
-                ]);
-
-            if (Product::find($request->id) != null)
-                return json_encode([
-                    "result" => "REGISTRO JA EXISTENTE",
-                    "code" => 400
-                ]);
-
-            $product = new Product();
-            $product->id = $request->id;
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->image = $this->uploadImage($request);
-            $product->created_at = date("Y-m-d H:i:s", time());
-            $product->updated_at = date("Y-m-d H:i:s", time());
-            $product->save();
-
-            return json_encode([
-                "result" => "REGISTRO INSERIDO",
-                "code" => 200
-            ]);
+        if($id == null){ // GET ALL PRODUCTS
+            return Product::all();
+        }else{ // GET A SPECIFIC PRODUCT
+            return (Product::find($id) != null)
+                ? Product::find($id)
+                : json_encode([ "result" => "PRODUTO NAO ENCONTRADO", "code" => 404]);
         }
     }
 
-    // PUT PRODUCTS
-    public function update(Request $request, $id)
+    public function post(Request $request)
     {
+
+        if($request->update == "true"){ // METHOD PUT
+            return $this->put($request);
+        }
+
+        if ($request->id == null ||
+            $request->name == null ||
+            $request->description == null ||
+            $request->price == null )
+            return json_encode([
+                "result" => "PARAMETROS INVALIDOS",
+                "code" => 400
+            ]);
+
+        if (Product::find($request->id) != null)
+            return json_encode([
+                "result" => "REGISTRO JA EXISTENTE",
+                "code" => 400
+            ]);
+
+        $product = new Product();
+        $product->id = $request->id;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->image = $this->uploadImage($request);
+        $product->created_at = date("Y-m-d H:i:s", time());
+        $product->updated_at = date("Y-m-d H:i:s", time());
+        $product->save();
+
+        return json_encode([
+            "result" => "REGISTRO INSERIDO",
+            "code" => 200
+        ]);
+    }
+
+    public function put(Request $request)
+    {
+        $id = $request->id;
 
         if ($request->id == null ||
             $request->name == null ||
@@ -96,28 +98,29 @@ class ProductController extends Controller
             "result" => "REGISTRO ATUALIZADO",
             "code" => 200
         ]);
+
     }
 
-    // DELETE PRODUCTS
-    public function destroy(Request $request, $id = null)
+    public function delete(Request $request)
     {
+        $id = $request->id;
 
         $json = ["result" => "", "code" => ""];
 
         if($request->pass == env("ADMPASS")){
             if($id != 0){
+
                 $product = Product::findOrFail($id);
 
                 $product->delete();
+                $this->deletarDiretorio($id);
 
                 $json['result'] = "REGISTRO DELETADO";
                 $json['code'] = 200;
             }else{
-                // DELETE ALL PRODUCTS
-                Product::truncate();
 
-                $json['result'] = "TODOS OS REGISTROS FORAM DELETADOS";
-                $json['code'] = 200;
+                $json['result'] = "PARAMETROS INVÁLIDOS, FORNEÇA UM ID";
+                $json['code'] = 404;
             }
         }else{
             $json['result'] = "ACESSO NAO PERMITIDO";
@@ -136,7 +139,7 @@ class ProductController extends Controller
 
                 if ($ext != "jpg" && $ext != "jpeg" && $ext != "png"){
                     die(json_encode([
-                        "result" => "FORMATO DE IMAGEM INVALIDO",
+                        "result" => "FORMATO DE IMAGEM INVÁLIDO",
                         "code" => 400
                     ]));
                 }
@@ -151,4 +154,11 @@ class ProductController extends Controller
         return $fullPath;
     }
 
+    private function deletarDiretorio($id)
+    {
+        $path = public_path() . "/img/upload/" . $id . "/";
+        if(directoryExists($path)){
+            File::deleteDirectory($path);
+        }
+    }
 }
