@@ -104,24 +104,26 @@ http://tecpaper.tk/tecpaper/public/api/products/
 - #### Example with [AsyncHttpClient](https://loopj.com/android-async-http/) (Android)
 
 ```JAVASCRIPT
-RequestParams params = new RequestParams();
-        params.put("id", id);
-        params.put("name", name);
-        params.put("description", desc);
-        params.put("price", Double.valueOf(price));
-        params.put("image", new FileInputStream(fileImage), fileImage.getName());
+    RequestParams params = new RequestParams();
+        params.put("id", "7891040091027");
+        params.put("name", "Mini post-it");
+        params.put("description", "Notas auto-adesivas removíveis. 4 blocos de 100 folhas.");
+        params.put("price", 4.25);
+        params.put("image", new FileInputStream(new File("/sdcard/filename.jpeg")), "filename.jpg");
         
         new AsyncHttpClient()
-                .post("", params, new JsonHttpResponseHandler(){
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        try {
-                            Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+            .post("http://tecpaper.tk/tecpaper/public/api/products/", 
+                params, 
+                new JsonHttpResponseHandler(){
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+        });
 ```
 
 
@@ -166,17 +168,18 @@ http://tecpaper.tk/tecpaper/public/api/products/
         params.put("image", new FileInputStream(new File("/sdcard/filename.jpeg")), "filename.jpg");
         
         new AsyncHttpClient()
-                .post("http://tecpaper.tk/tecpaper/public/api/products", 
-                    params, new JsonHttpResponseHandler(){
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                });
+            .post("http://tecpaper.tk/tecpaper/public/api/products/", 
+                params, 
+                new JsonHttpResponseHandler(){
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        Toast.makeText(mContext, response.getString("result"), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+        });
 ```
 ```JSON
 { // SUCCESS
